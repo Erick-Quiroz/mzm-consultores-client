@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+enum Estado {
+  ACTIVO
+  INACTIVO
+}
+
+enum ActionType {
+  CREATION
+  UPDATE
+  DELETE
+}
+enum DuracionUnidad {
+  DIAS
+  SEMANAS
+  MESES
+  ANIOS
+}
+
+model TipoServicio {
+  id     String @id @default(uuid())
+  nombre String @unique
+  estado        Estado?     
+  servicios Servicio[] @relation("TipoServicioServicios")
+  publicaciones Publicacion[] @relation("TipoServicioPublicaciones")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+model TipoPublicacion {
+  id   String @id @default(uuid())
+  nombre String @unique
+  estado        Estado?     
+  publicaciones Publicacion[] @relation("TipoPublicacionRelacion")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model TipoEmpresa {
+  id           String        @id @default(uuid())
+  nombre       String        @unique
+  estado        Estado?
+  publicaciones Publicacion[] @relation("TipoEmpresaPublicaciones")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+enum EstadoProyecto {
+  NUEVO
+  EN_PROCESO
+  FINALIZADO
+  CANCELADO
+}
+ 
+model Rol {
+  id          String    @id @default(uuid())
+  nombre      String    @unique
+  descripcion String?
+  estado        Estado?
+  usuarios    Usuario[] @relation("UsuarioRoles")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Publicacion {
+  id               String     @id @default(uuid())
+  titulo           String
+  contenido        String?
+  usuarioId        String?
+  usuario          Usuario?   @relation(fields: [usuarioId], references: [id], onDelete: SetNull, name: "UsuarioPublicaciones")
+  estado           Estado?
+  tipoPublicacionId String
+  tipoPublicacion  TipoPublicacion @relation(fields: [tipoPublicacionId], references: [id], onDelete: Restrict, name: "TipoPublicacionRelacion")
+  imagenes         Img[]      @relation("PublicacionImagenes")
+  tipoEmpresaId    String?
+  tipoEmpresa      TipoEmpresa? @relation(fields: [tipoEmpresaId], references: [id], onDelete: Restrict, name: "TipoEmpresaPublicaciones")
+  ubicacion        String
+  duracionValor    Int        
+  duracionUnidad   DuracionUnidad 
+  estadoProyecto   EstadoProyecto?
+  destacadoHasta   DateTime?
+  tipoServicioId   String? // Nuevo campo de relación a TipoServicio
+  tipoServicio     TipoServicio? @relation(fields: [tipoServicioId], references: [id], onDelete: Restrict, name: "TipoServicioPublicaciones") // Nueva relación con TipoServicio
+  createdAt        DateTime   @default(now())
+  logs             Log[]      @relation("PublicacionLogs")
+  updatedAt        DateTime   @updatedAt
+}
+
+
+model Servicio {
+  id               String       @id @default(uuid())
+  titulo           String
+  tipoServicioId   String
+  tipoServicio     TipoServicio @relation(fields: [tipoServicioId], references: [id], onDelete: Restrict, name: "TipoServicioServicios")
+  contenido        String?
+  usuarioId        String?
+  usuario          Usuario?     @relation(fields: [usuarioId], references: [id], onDelete: SetNull, name: "UsuarioServicios")
+  estado           Estado?
+  imagenes         Img[]        @relation("ServicioImagenes")
+  logs             Log[]        @relation("ServicioLogs")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+model Img {
+  id            String     @id @default(uuid())
+  url           String
+  textoAlt      String?
+  publicacionId String?
+  publicacion   Publicacion? @relation(fields: [publicacionId], references: [id], onDelete: Cascade, name: "PublicacionImagenes")
+  servicioId    String?
+  servicio      Servicio?  @relation(fields: [servicioId], references: [id], onDelete: Cascade, name: "ServicioImagenes")
+  usuarioId     String?
+  usuario       Usuario?   @relation(fields: [usuarioId], references: [id], onDelete: Cascade, name: "UsuarioImagenes")
+  logs          Log[]      @relation("ImagenLogs")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Usuario {
+  id            String      @id @default(uuid())
+  nombre        String
+  apellido      String
+  correo        String      @unique
+  contrasena    String
+  celular       String?
+  telefono      String?
+  imagenPerfil  String?
+  estado        Estado?     
+  publicaciones Publicacion[] @relation("UsuarioPublicaciones")
+  servicios     Servicio[]  @relation("UsuarioServicios")
+  rolId         String?
+  rol           Rol?        @relation(fields: [rolId], references: [id], onDelete: SetNull, name: "UsuarioRoles")
+  logs          Log[]       @relation("UsuarioLogs")
+  actividad     Actividad[] @relation("UsuarioActividad")
+  imagenes      Img[]       @relation("UsuarioImagenes")
+  notificaciones Notificacion[] @relation("UsuarioNotificaciones")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Log {
+  id            String     @id @default(uuid())
+  accion        ActionType
+  usuarioId     String?
+  usuario       Usuario?   @relation(fields: [usuarioId], references: [id], onDelete: SetNull, name: "UsuarioLogs")
+  publicacionId String?
+  publicacion   Publicacion? @relation(fields: [publicacionId], references: [id], onDelete: SetNull, name: "PublicacionLogs")
+  servicioId    String?
+  servicio      Servicio?   @relation(fields: [servicioId], references: [id], onDelete: SetNull, name: "ServicioLogs")
+  imagenId      String?
+  imagen        Img?        @relation(fields: [imagenId], references: [id], onDelete: SetNull, name: "ImagenLogs")
+  detalles      String?
+  createdAt     DateTime    @default(now())
+}
+
+model Actividad {
+  id             String   @id @default(uuid())
+  usuarioId      String
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade, name: "UsuarioActividad")
+  ip             String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Vista {
+  id         String   @id @default(uuid())
+  urlPagina  String
+  ip        String?
+  date      DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+model Notificacion {
+  id            String     @id @default(uuid())
+  usuarioId     String     // Usuario que recibirá la notificación
+  usuario       Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade, name: "UsuarioNotificaciones")
+  tipo          String     // Tipo de notificación: "PUBLICACION", "SERVICIO", "USUARIO", etc.
+  accion        ActionType 
+  mensaje       String     // Mensaje de la notificación
+  relacionadoId String?    // ID del objeto relacionado (publicación, servicio, usuario)
+  leido         Boolean    @default(false) // Si la notificación ha sido vista
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
