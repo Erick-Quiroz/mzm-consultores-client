@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import SectionTitle from "@/components/Common/SectionTitle";
+
 import ElegantServiceCards from "@/components/elegant-service-cards";
 import { Newspaper } from "lucide-react";
 
@@ -162,12 +162,6 @@ const Blog = () => {
                 Últimas Novedades
               </span>
             </div>
-
-            <SectionTitle
-              title="Mantente al Día con las Últimas Novedades"
-              paragraph="Descubre lo último en noticias, eventos y más con nuestra sección de novedades. No te pierdas ninguna actualización importante y mantente informado sobre lo que sucede en tu comunidad y en el mundo."
-              center
-            />
           </div>
         </div>
 

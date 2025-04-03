@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -39,37 +39,40 @@ type PropsType = Publicacion & {
 };
 
 export default function BlogDetailsPage({
-  params,
+  params: paramsPromise,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const params = use(paramsPromise); // Desestructura params usando React.use()
   const [post, setPost] = useState<PropsType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [likes, setLikes] = useState<{ [key: string]: boolean }>({});
 
-  const fetchPost = async () => {
-    try {
-      const response = await Get_Post_ById(params.id);
-      if (!response) throw new Error("Error al obtener el servicio");
-
-      setPost({
-        ...response,
-        images: response.imagenes.map((imagen) => ({
-          ...imagen,
-          url: imagen.url || "/placeholder.svg",
-          textoAlt: imagen.textoAlt || response.titulo,
-        })),
-      });
-    } catch (error) {
-      console.error("Error fetching servicio:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  console.log("params.id", params.id);
 
   useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await Get_Post_ById(params.id);
+        if (!response) throw new Error("Error al obtener el servicio");
+
+        setPost({
+          ...response,
+          images: response.imagenes.map((imagen) => ({
+            ...imagen,
+            url: imagen.url || "/placeholder.svg",
+            textoAlt: imagen.textoAlt || response.titulo,
+          })),
+        });
+      } catch (error) {
+        console.error("Error fetching servicio:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchPost();
   }, [params.id]);
 

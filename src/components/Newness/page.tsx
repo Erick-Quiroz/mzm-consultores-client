@@ -186,7 +186,7 @@ export default function PublicationTimeline() {
                       </div>
 
                       <Button variant="outline" size="sm">
-                        <Link href={`/novedades/${publication.id}`}>
+                        <Link href={`/novedades/${String(publication.id)}`}>
                           Ver publicación
                         </Link>
                       </Button>

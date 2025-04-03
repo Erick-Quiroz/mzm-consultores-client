@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -39,10 +39,11 @@ type PropsType = Servicio & {
 };
 
 export default function BlogDetailsPage({
-  params,
+  params: paramsPromise,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const params = use(paramsPromise); // Desestructura params usando React.use()
   const [post, setPost] = useState<PropsType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
