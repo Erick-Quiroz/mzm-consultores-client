@@ -139,8 +139,15 @@ export default function BlogDetailsPage({
             )}
 
             {/* Contenido del artículo */}
-            <article className="prose prose-sm dark:prose-invert sm:prose-base max-w-none mb-8">
-              <p>{post.contenido}</p>
+            <article className="prose prose-sm dark:prose-invert sm:prose-base max-w-none mb-8 text-justify">
+              {post.contenido
+                ?.split(/(?<=\.)\s*\n\s*/) // Divide después de punto seguido de espacios y saltos
+                .filter((paragraph) => paragraph.trim().length > 0) // Elimina párrafos vacíos
+                .map((paragraph, index) => (
+                  <p key={index} className="mb-6 last:mb-0">
+                    {paragraph.trim()}
+                  </p>
+                ))}
             </article>
 
             {/* Galería de imágenes estilo Instagram */}
