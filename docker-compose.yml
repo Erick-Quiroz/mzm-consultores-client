@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  client:
+    build: .
+    container_name: mzm_client
+    ports:
+      - "3001:3000"
+    environment:
+    NODE_ENV: production
+    networks:
+      - mzm_network
+
+networks:
+  app_network:
+    external: true
