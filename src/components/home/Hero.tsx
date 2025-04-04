@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
@@ -11,12 +11,16 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { ElectricLogo } from "../ui/electric-logo";
+import Image from "next/image";
 
 export default function HeroSection() {
-  const heroRef = useRef<HTMLDivElement>(null);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const lightningBgRef = useRef<HTMLDivElement>(null);
 
+  // Optimización: Carga diferida de la animación de rayos
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const createLightningFlash = () => {
       if (!lightningBgRef.current) return;
 
@@ -27,39 +31,48 @@ export default function HeroSection() {
       const rotation = Math.random() * 360;
       const width = 1 + Math.random() * 3;
 
-      flash.style.position = "absolute";
-      flash.style.left = `${xPos}%`;
-      flash.style.top = `${yPos}%`;
-      flash.style.width = `${length}px`;
-      flash.style.height = `${width}px`;
-      flash.style.transform = `rotate(${rotation}deg)`;
-      flash.style.background =
-        "linear-gradient(90deg, rgba(64,156,255,0) 0%, rgba(64,156,255,1) 50%, rgba(64,156,255,0) 100%)";
-      flash.style.opacity = "0";
-      flash.style.boxShadow = "0 0 10px 2px rgba(64,156,255,0.8)";
-      flash.style.borderRadius = "50px";
-      flash.style.zIndex = "1";
-
-      flash.animate([{ opacity: 0 }, { opacity: 0.8 }, { opacity: 0 }], {
-        duration: 300 + Math.random() * 500,
-        easing: "ease-out",
+      Object.assign(flash.style, {
+        position: "absolute",
+        left: `${xPos}%`,
+        top: `${yPos}%`,
+        width: `${length}px`,
+        height: `${width}px`,
+        transform: `rotate(${rotation}deg)`,
+        background:
+          "linear-gradient(90deg, rgba(64,156,255,0) 0%, rgba(64,156,255,1) 50%, rgba(64,156,255,0) 100%)",
+        opacity: "0",
+        boxShadow: "0 0 10px 2px rgba(64,156,255,0.8)",
+        borderRadius: "50px",
+        zIndex: "1",
+        willChange: "opacity", // Optimización para el navegador
       });
 
+      const animation = flash.animate(
+        [{ opacity: 0 }, { opacity: 0.8 }, { opacity: 0 }],
+        {
+          duration: 300 + Math.random() * 500,
+          easing: "ease-out",
+        }
+      );
+
       lightningBgRef.current.appendChild(flash);
-      setTimeout(() => flash.remove(), 600);
+      animation.onfinish = () => flash.remove();
     };
 
-    const interval = setInterval(() => {
-      if (Math.random() > 0.7) {
-        const flashes = 1 + Math.floor(Math.random() * 3);
-        for (let i = 0; i < flashes; i++) {
-          setTimeout(createLightningFlash, i * 100);
+    // Inicia la animación solo cuando la imagen está cargada
+    if (isImageLoaded) {
+      const interval = setInterval(() => {
+        if (Math.random() > 0.7) {
+          const flashes = 1 + Math.floor(Math.random() * 3);
+          for (let i = 0; i < flashes; i++) {
+            setTimeout(createLightningFlash, i * 100);
+          }
         }
-      }
-    }, 2000);
+      }, 2000);
 
-    return () => clearInterval(interval);
-  }, []);
+      return () => clearInterval(interval);
+    }
+  }, [isImageLoaded]);
 
   const serviceItems = [
     { id: "service-1", icon: Zap, label: "Instalaciones" },
@@ -70,29 +83,45 @@ export default function HeroSection() {
 
   return (
     <motion.div
-      ref={heroRef}
       className="relative w-full overflow-hidden bg-gradient-to-b from-gray-800 via-gray-700 to-black min-h-screen flex flex-col items-center justify-center"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
     >
-      {/* Fondo animado */}
+      {/* Fondo optimizado con Next.js Image */}
       <motion.div
-        className="absolute inset-0 opacity-50 bg-[url('/fondo.webp')] bg-cover bg-center"
+        className="absolute inset-0 opacity-50"
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         style={{
-          // Agrega un gradiente de desvanecimiento en la parte inferior
           maskImage: "linear-gradient(to bottom, black 90%, transparent 100%)",
           WebkitMaskImage:
             "linear-gradient(to bottom, black 90%, transparent 100%)",
         }}
-      />
+      >
+        <Image
+          src="/fondo.webp"
+          alt="Fondo eléctrico"
+          fill
+          priority
+          quality={85}
+          sizes="100vw"
+          className="object-cover object-center"
+          onLoadingComplete={() => setIsImageLoaded(true)}
+        />
+      </motion.div>
 
-      {/* Capa para los destellos eléctricos */}
-      <div ref={lightningBgRef} className="absolute inset-0 overflow-hidden" />
+      {/* Capa para los destellos eléctricos (solo se activa cuando la imagen está cargada) */}
+      {isImageLoaded && (
+        <div
+          ref={lightningBgRef}
+          className="absolute inset-0 overflow-hidden"
+        />
+      )}
+
       <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t dark:from-[#101828] from-[#F9FAFB] to-transparent pointer-events-none" />
+
       <div className="container mx-auto px-4 py-4 relative z-10">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
