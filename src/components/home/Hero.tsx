@@ -101,12 +101,12 @@ export default function HeroSection() {
         }}
       >
         <Image
-          src="/fondo.webp"
+          src="/fondo-hero.webp"
           alt="Fondo eléctrico"
           fill
           priority
           quality={85}
-          sizes="100vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
           className="object-cover object-center"
           onLoadingComplete={() => setIsImageLoaded(true)}
         />
