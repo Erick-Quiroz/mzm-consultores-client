@@ -58,7 +58,7 @@ export default function PublicationTimeline() {
       console.error("Error fetching servicios:", error);
     }
   };
-  console.log(publicaciones);
+  console.log(publicaciones, "publo");
   useEffect(() => {
     fetchPubliaciones();
   }, []);
@@ -167,22 +167,30 @@ export default function PublicationTimeline() {
                       </h3>
 
                       <div className="flex items-center text-sm text-muted-foreground mb-3">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        <span>{publication.ubicacion}</span>
+                        {publication.ubicacion && (
+                          <>
+                            <MapPin className="h-4 w-4 mr-1" />
+                            <span>{publication.ubicacion}</span>
+                          </>
+                        )}
                       </div>
 
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                        {publication.contenido}
+                        {publication.contenido?.replace(/<[^>]*>/g, "") || ""}
                       </p>
 
                       <div className="flex flex-wrap gap-2 mb-4">
-                        <Badge
-                          variant="secondary"
-                          className="flex items-center gap-1"
-                        >
-                          <Calendar className="h-3 w-3" />
-                          {new Date(publication.createdAt).toLocaleDateString()}
-                        </Badge>
+                        {publication.createdAt && (
+                          <Badge
+                            variant="secondary"
+                            className="flex items-center gap-1"
+                          >
+                            <Calendar className="h-3 w-3" />
+                            {new Date(
+                              publication.createdAt
+                            ).toLocaleDateString()}
+                          </Badge>
+                        )}
                       </div>
 
                       <Button variant="outline" size="sm">

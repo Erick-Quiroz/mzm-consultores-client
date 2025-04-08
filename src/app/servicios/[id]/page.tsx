@@ -32,6 +32,7 @@ import {
 import { Get_Service_ById } from "@/actions/actions";
 import { Img, Servicio, TipoServicio } from "@prisma/client";
 import clsx from "clsx";
+import { RichTextViewer } from "@/components/RichTextViewer";
 
 type PropsType = Servicio & {
   images: Img[];
@@ -140,14 +141,7 @@ export default function BlogDetailsPage({
 
             {/* Contenido del artículo */}
             <article className="prose prose-sm dark:prose-invert sm:prose-base max-w-none mb-8 text-justify">
-              {post.contenido
-                ?.split(/(?<=\.)\s*\n\s*/) // Divide después de punto seguido de espacios y saltos
-                .filter((paragraph) => paragraph.trim().length > 0) // Elimina párrafos vacíos
-                .map((paragraph, index) => (
-                  <p key={index} className="mb-6 last:mb-0">
-                    {paragraph.trim()}
-                  </p>
-                ))}
+              <RichTextViewer value={post.contenido || ""} />
             </article>
 
             {/* Galería de imágenes estilo Instagram */}

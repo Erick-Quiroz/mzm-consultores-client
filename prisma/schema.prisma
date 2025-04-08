@@ -80,9 +80,9 @@ model Publicacion {
   imagenes         Img[]      @relation("PublicacionImagenes")
   tipoEmpresaId    String?
   tipoEmpresa      TipoEmpresa? @relation(fields: [tipoEmpresaId], references: [id], onDelete: Restrict, name: "TipoEmpresaPublicaciones")
-  ubicacion        String
-  duracionValor    Int        
-  duracionUnidad   DuracionUnidad 
+  ubicacion        String?
+  duracionValor    Int?        
+  duracionUnidad   DuracionUnidad?
   estadoProyecto   EstadoProyecto?
   destacadoHasta   DateTime?
   tipoServicioId   String? // Nuevo campo de relación a TipoServicio

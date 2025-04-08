@@ -32,6 +32,7 @@ import {
 import { Get_Post_ById } from "@/actions/actions";
 import { Img, Publicacion, TipoPublicacion } from "@prisma/client";
 import clsx from "clsx";
+import { RichTextViewer } from "@/components/RichTextViewer";
 
 type PropsType = Publicacion & {
   images: Img[];
@@ -150,7 +151,8 @@ export default function BlogDetailsPage({
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   <span>
-                    {post.duracionValor} {post.duracionUnidad.toLowerCase()}
+                    {post.duracionValor}{" "}
+                    {(post.duracionUnidad ?? "").toLowerCase()}
                   </span>
                 </div>
 
@@ -185,14 +187,7 @@ export default function BlogDetailsPage({
 
             {/* Contenido del artículo */}
             <article className="prose prose-sm dark:prose-invert sm:prose-base max-w-none mb-8 text-justify">
-              {post.contenido
-                ?.split(/(?<=\.)\s*\n\s*/) // Divide después de punto seguido de espacios y saltos
-                .filter((paragraph) => paragraph.trim().length > 0) // Elimina párrafos vacíos
-                .map((paragraph, index) => (
-                  <p key={index} className="mb-6 last:mb-0">
-                    {paragraph.trim()}
-                  </p>
-                ))}
+              <RichTextViewer value={post.contenido || ""} />
             </article>
 
             {/* Galería de imágenes estilo Instagram */}

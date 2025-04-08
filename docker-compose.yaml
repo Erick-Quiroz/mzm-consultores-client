@@ -12,5 +12,5 @@ services:
       - mzm_network
 
 networks:
-  app_network:
+  mzm_network:
     external: true

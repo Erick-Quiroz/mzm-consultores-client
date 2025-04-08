@@ -1,17 +1,13 @@
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "minio-h4swg8ss4k8osowc8ook8s0k.147.93.118.204.sslip.io",
-        pathname: "/mzm/**",
-      },
-      {
-        protocol: "https",
-        hostname: "ejemplo.com",
-        pathname: "**",
-      },
-    ],
+    domains: ["mzmconsultores-minio-199198-147-93-118-204.traefik.me"],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb", // ✅ Aumentar límite si subes imágenes grandes
+    },
   },
 };
 
