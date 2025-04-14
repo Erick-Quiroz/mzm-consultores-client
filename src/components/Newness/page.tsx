@@ -104,16 +104,16 @@ export default function PublicationTimeline() {
   }, {} as Record<string, PropsType[]>);
 
   return (
-    <div>
+    <div className="mt-20">
       <Filters
         onFilterChange={handleFilterChange}
         tiposDeServicio={tiposDeServicio} // Pasar los tipos de servicio
       />
 
-      <div className="px-6">
+      <div className="px-6 ">
         {Object.entries(groupedPublications).map(([groupName, pubs]) => (
           <div key={groupName} className="space-y-4">
-            <div className="flex items-center gap-2">
+            <div className=" flex items-center gap-2">
               <div className="bg-primary h-8 w-8 rounded-full flex items-center justify-center text-primary-foreground">
                 <Tag className="h-4 w-4" />
               </div>
@@ -121,7 +121,7 @@ export default function PublicationTimeline() {
               <Separator className="flex-1" />
             </div>
 
-            <div className="pl-4 border-l-2 border-muted space-y-6">
+            <div className=" pl-4 border-l-2 border-muted space-y-6">
               {pubs.map((publication) => (
                 <Card key={publication.id} className="overflow-hidden">
                   <div className="flex flex-col md:flex-row gap-4 p-4">

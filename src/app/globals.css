@@ -1,6 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gravitas+One&family=Rozha+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -44,6 +49,8 @@
 }
 
 :root {
+  --font-geist-sans: "Geist Sans", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -118,6 +125,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif;
   }
 }
 .card-animate.animate-in {
@@ -152,4 +160,44 @@
 }
 .glow-border {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+}
+.font-sans-custom {
+  font-family: var(--font-sans);
+}
+
+.font-mono-custom {
+  font-family: var(--font-mono);
+}
+.rozha {
+  font-family: "Rozha One", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.cormorant {
+  font-family: "Cormorant", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.cardo-regular {
+  font-family: "Cardo", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.cardo-bold {
+  font-family: "Cardo", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.cardo-regular-italic {
+  font-family: "Cardo", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+.caslon{
+  font-family: "Libre Caslon Display", serif;
+  font-weight: 400;
+  font-style: normal;
 }

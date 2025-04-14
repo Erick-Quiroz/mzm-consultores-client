@@ -1,11 +1,9 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 interface MenuItem {
@@ -22,7 +20,6 @@ interface MobileMenuProps {
   items: MenuItem[];
   isOpen: boolean;
   onClose: () => void;
-
   companyName: string;
 }
 
@@ -30,14 +27,11 @@ export function MobileMenu({
   items,
   isOpen,
   onClose,
-
   companyName,
 }: MobileMenuProps) {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(
     {}
   );
-
-  if (!isOpen) return null;
 
   const toggleSubmenu = (title: string) => {
     setExpandedItems((prev) => ({
@@ -46,19 +40,24 @@ export function MobileMenu({
     }));
   };
 
+  if (!isOpen) return null;
+
   return (
     <div
-      className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
       onClick={(e) => {
-        // Close when clicking the background, but not when clicking content
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
+        if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="container mx-auto px-4 py-4 min-h-screen flex flex-col">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">logo</div>
+      <div
+        className="w-full max-h-[90vh] bg-background shadow-lg transition-all duration-300 ease-in-out animate-in slide-in-from-top"
+        style={{
+          overflowY: "auto",
+          zIndex: 40,
+        }}
+      >
+        <div className="flex justify-between items-center p-4 border-b">
+          <div className="text-lg font-semibold">Logo</div>
           <Button
             variant="ghost"
             size="icon"
@@ -66,27 +65,18 @@ export function MobileMenu({
             className="rounded-full hover:bg-muted"
           >
             <X className="h-6 w-6" />
-            <span className="sr-only">Cerrar menú</span>
           </Button>
         </div>
 
-        <div className="flex flex-col items-center justify-center mt-6 mb-8">
-          <div className="text-xl font-bold text-center">
-            MZM Consultores SRL
-          </div>
-        </div>
-
-        <Separator className="mb-6" />
-
-        <nav className="flex-1">
-          <ul className="space-y-6">
+        <nav className="flex-1 px-4 py-6 space-y-6">
+          <ul className="space-y-4">
             {items.map((item) => (
-              <li key={item.title} className="py-1">
+              <li key={item.title}>
                 {item.submenu ? (
-                  <div className="space-y-3">
+                  <div>
                     <button
                       onClick={() => toggleSubmenu(item.title)}
-                      className="flex w-full items-center justify-between text-lg font-medium text-foreground hover:text-primary transition group"
+                      className="flex w-full items-center justify-between text-base font-medium text-foreground hover:text-primary transition"
                     >
                       <span>{item.title}</span>
                       <ChevronDown
@@ -96,11 +86,10 @@ export function MobileMenu({
                         )}
                       />
                     </button>
-
                     {expandedItems[item.title] && (
-                      <ul className="mt-2 space-y-3 pl-4 border-l-2 border-muted">
+                      <ul className="mt-2 space-y-2 pl-4 border-l border-muted">
                         {item.submenu.map((subItem) => (
-                          <li key={subItem.title} className="py-1">
+                          <li key={subItem.title}>
                             <a
                               href={subItem.href}
                               className="block hover:text-primary transition"
@@ -108,12 +97,10 @@ export function MobileMenu({
                             >
                               <div className="flex items-center gap-2">
                                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                                <span className="font-medium">
-                                  {subItem.title}
-                                </span>
+                                <span>{subItem.title}</span>
                               </div>
                               {subItem.description && (
-                                <p className="mt-1 text-sm text-muted-foreground pl-6">
+                                <p className="ml-6 text-sm text-muted-foreground">
                                   {subItem.description}
                                 </p>
                               )}
@@ -126,7 +113,7 @@ export function MobileMenu({
                 ) : (
                   <a
                     href={item.href}
-                    className="block text-lg font-medium text-foreground hover:text-primary transition"
+                    className="block text-base font-medium text-foreground hover:text-primary transition"
                     onClick={onClose}
                   >
                     {item.title}
@@ -137,13 +124,9 @@ export function MobileMenu({
           </ul>
         </nav>
 
-        <div className="mt-auto pt-6">
-          <Separator className="mb-6" />
-          <div className="flex justify-center space-x-4 text-sm text-muted-foreground"></div>
-          <div className="text-center mt-4 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {companyName}. Todos los derechos
-            reservados.
-          </div>
+        <div className="px-4 pt-4 pb-6 border-t text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} {companyName}. Todos los derechos
+          reservados.
         </div>
       </div>
     </div>

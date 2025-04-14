@@ -21,7 +21,7 @@ export default function Quien() {
               <div className="text-xs uppercase tracking-wider text-white bg-blue-900 inline-block px-2 py-1 mb-4">
                 CONOZCA NUESTRA EMPRESA
               </div>
-              <h2 className="text-3xl font-bold mb-4">¿Quiénes somos?</h2>
+              <h2 className="rozha text-3xl font-bold mb-4">¿Quiénes somos?</h2>
               <p className="text-gray-600 mb-4">
                 Somos una empresa líder en el sector de la logística
                 internacional, especializada en ofrecer soluciones integrales
