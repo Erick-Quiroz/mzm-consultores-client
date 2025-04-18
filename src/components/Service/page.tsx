@@ -13,32 +13,31 @@ type propsTipo = Servicio & {
 };
 
 export default function ServiciosCategoriaPage() {
-  const [categoriaSeleccionada, setCategoriaSeleccionada] =
-    useState<string>("todas");
-  const [busqueda, setBusqueda] = useState<string>("");
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("todas");
+  const [busqueda, setBusqueda] = useState("");
   const [servicios, setServicios] = useState<propsTipo[]>([]);
 
-  const fetchServicios = async () => {
-    try {
-      const response = await Get_Service();
-      if (!response) throw new Error("Error al obtener los servicios");
+  useEffect(() => {
+    const fetchServicios = async () => {
+      try {
+        const response = await Get_Service();
+        if (!response) throw new Error("Error al obtener los servicios");
 
-      setServicios(
-        response.map((servicio) => ({
+        const formattedServicios = response.map((servicio) => ({
           ...servicio,
           images: servicio.imagenes.map((imagen) => ({
             ...imagen,
             url: imagen.url || "/placeholder.svg",
             textoAlt: imagen.textoAlt || servicio.titulo,
           })),
-        }))
-      );
-    } catch (error) {
-      console.error("Error fetching servicios:", error);
-    }
-  };
+        }));
 
-  useEffect(() => {
+        setServicios(formattedServicios);
+      } catch (error) {
+        console.error("Error fetching servicios:", error);
+      }
+    };
+
     fetchServicios();
   }, []);
 
@@ -53,7 +52,7 @@ export default function ServiciosCategoriaPage() {
       servicio.tipoServicioId === categoriaSeleccionada;
 
     const coincideBusqueda =
-      busqueda === "" ||
+      !busqueda ||
       servicio.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
       servicio.contenido?.toLowerCase().includes(busqueda.toLowerCase());
 
@@ -61,14 +60,12 @@ export default function ServiciosCategoriaPage() {
   });
 
   return (
-    <div className="mt-10 min-h-screen bg-gradient-to-b  ">
-      <div className="p-10  md:px-10 lg:px-26">
+    <div className="mt-10 min-h-screen bg-gradient-to-b">
+      <div className="p-10 md:px-10 lg:px-26">
         <ServiceFilters
           categorias={[
             "todas",
-            ...new Set(
-              servicios.map((servicio) => servicio.tipoServicio?.id || "")
-            ),
+            ...new Set(servicios.map((s) => s.tipoServicio?.id || "")),
           ]}
           categoriaSeleccionada={categoriaSeleccionada}
           setCategoriaSeleccionada={setCategoriaSeleccionada}

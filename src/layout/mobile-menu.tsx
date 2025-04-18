@@ -50,7 +50,7 @@ export function MobileMenu({
       }}
     >
       <div
-        className="w-full max-h-[90vh] bg-background shadow-lg transition-all duration-300 ease-in-out animate-in slide-in-from-top"
+        className="w-full max-h-[90vh] bg-background shadow-lg transition-all duration-300 ease-in-out"
         style={{
           overflowY: "auto",
           zIndex: 40,
@@ -58,12 +58,7 @@ export function MobileMenu({
       >
         <div className="flex justify-between items-center p-4 border-b">
           <div className="text-lg font-semibold">Logo</div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="rounded-full hover:bg-muted"
-          >
+          <Button className="rounded-full hover:bg-gray-200">
             <X className="h-6 w-6" />
           </Button>
         </div>

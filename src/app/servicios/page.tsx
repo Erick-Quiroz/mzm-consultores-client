@@ -11,7 +11,7 @@ const Servicios = () => {
   return (
     <>
       {/* <MainServicios /> */}
-      <ServicesPage />
+      <ServicesPage  />
     </>
   );
 };

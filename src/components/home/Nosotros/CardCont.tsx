@@ -1,16 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import type React from "react";
+
+import { useEffect, useRef, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CountUp from "react-countup";
-import { Star } from "lucide-react";
 
 interface Item {
   icon: React.ReactNode;
@@ -20,86 +14,95 @@ interface Item {
 }
 
 export default function Card_Nosotros({ data }: { data: Item[] }) {
-  // Animation for cards
   const cardsRef = useRef<HTMLDivElement>(null);
+  const [startCounting, setStartCounting] = useState(false);
 
   useEffect(() => {
     if (!cardsRef.current) return;
-
-    const cards = cardsRef.current.querySelectorAll(".card-animate");
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in");
+            setStartCounting(true);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.5 }
     );
 
-    cards.forEach((card) => {
-      observer.observe(card);
-    });
+    const currentRef = cardsRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
 
     return () => {
-      cards.forEach((card) => {
-        observer.unobserve(card);
-      });
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
     };
   }, []);
 
   return (
     <div
       ref={cardsRef}
-      className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center"
+      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4"
     >
       {data.map((item, index) => (
         <Card
-          key={index}
-          className="card-animate opacity-0 translate-y-2 ease-out delay-[calc(100ms*var(--index))] hover:shadow-md hover:shadow-blue-500/10 dark:hover:shadow-orange-500/10 hover:-translate-y-1 transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 "
-          style={{ "--index": index } as React.CSSProperties}
+          key={item.title}
+          className={`text-center card-animate overflow-hidden relative 
+      ${getCardGradient(index)}
+      border-none rounded-lg shadow-md 
+      hover:shadow-lg hover:scale-105 transition-all duration-300`}
         >
-          <CardHeader className="flex flex-col items-center justify-center ">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-orange-500/20 rounded-full flex items-center justify-center mb-2 shadow-inner">
-              {item.icon}
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-12 h-12 rounded-full bg-white/10 -mr-6 -mt-6"></div>
+          <div className="absolute bottom-0 left-0 w-10 h-10 rounded-full bg-white/10 -ml-5 -mb-5"></div>
+
+          <CardHeader className="flex flex-col items-center p-2 sm:p-3 relative z-10">
+            <div
+              className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 
+                bg-white/20 backdrop-blur-sm rounded-full 
+                shadow-inner border border-white/30 mb-2"
+            >
+              <div className="text-white text-lg sm:text-xl">{item.icon}</div>
             </div>
-            <CardTitle className="text-sm text-blue-700 dark:text-orange-400">
+            <CardTitle className="mt-1 sm:mt-2 text-xs sm:text-sm font-bold text-white drop-shadow-md">
               {item.title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center ">
-            <CardDescription className="text-2xl font-bold bg-clip-text dark:text-blue-500 text-orange-400">
-              <CountUp
-                start={0}
-                end={item.cont}
-                duration={3}
-                enableScrollSpy
-                scrollSpyDelay={100}
-              />
-            </CardDescription>
-          </CardContent>
-          <CardFooter className="mt-auto flex flex-col items-center justify-center ">
-            <div className="flex items-center ">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={12}
-                  className={
-                    i < item.start
-                      ? "fill-yellow-500 text-yellow-500"
-                      : "text-gray-400"
-                  }
+          <CardContent className="p-2 sm:p-3 pb-3 text-center relative z-10">
+            {startCounting && (
+              <div className="bg-white/20 backdrop-blur-sm rounded-full py-1 px-3 inline-block">
+                <CountUp
+                  start={item.start}
+                  end={item.cont}
+                  duration={2.5}
+                  className="text-lg sm:text-2xl font-extrabold text-white"
+                  suffix="+"
                 />
-              ))}
-              <p className="ml-1 text-xs text-gray-600 dark:text-gray-300">
-                {item.start}/5
-              </p>
-            </div>
-          </CardFooter>
+              </div>
+            )}
+          </CardContent>
         </Card>
       ))}
     </div>
   );
+}
+
+// Function to get different gradient backgrounds for each card
+function getCardGradient(index: number): string {
+  const gradients = [
+    "bg-gradient-to-br from-purple-600 to-blue-500",
+    "bg-gradient-to-br from-emerald-500 to-teal-400",
+    "bg-gradient-to-br from-pink-500 to-rose-400",
+    "bg-gradient-to-br from-amber-500 to-orange-400",
+    "bg-gradient-to-br from-cyan-500 to-blue-400",
+    "bg-gradient-to-br from-fuchsia-500 to-purple-400",
+    "bg-gradient-to-br from-lime-500 to-green-400",
+    "bg-gradient-to-br from-red-500 to-rose-400",
+  ];
+
+  return gradients[index % gradients.length];
 }

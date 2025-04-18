@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Moon, Sun, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import { Switch } from "@/components/ui/switch";
 import { usePathname } from "next/navigation";
 
 const menuItems = [
@@ -61,17 +60,17 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
+      className={`playfair-display fixed top-0 left-0 w-full z-50 transition-colors duration-300 ${
         isHomePage
           ? scrolled
             ? theme === "dark"
               ? "bg-gray-900 shadow-md"
-              : "bg-background shadow-md"
-            : "bg-transparent"
+              : "bg-gray-100  shadow-md"
+            : "bg-transparent shadow-md"
           : scrolled
           ? theme === "dark"
             ? "bg-gray-900 shadow-md"
-            : "bg-background shadow-md"
+            : "bg-gray-100  shadow-md"
           : "bg-transparent shadow-sm"
       }`}
     >
@@ -85,31 +84,13 @@ export function Header() {
               className="bg-transparent hover:bg-transparent"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              <div className="flex items-center space-x-2 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-                <Sun
-                  className={`h-[1.2rem] w-[1.2rem] transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                    theme === "dark"
-                      ? "text-[#A1A1AA] scale-75 rotate-12"
-                      : "text-yellow-500 scale-100 rotate-0"
-                  }`}
-                />
-                <Switch
-                  checked={theme === "dark"}
-                  onCheckedChange={() =>
-                    setTheme(theme === "light" ? "dark" : "light")
-                  }
-                  aria-label="Toggle theme"
-                  className="transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110"
-                />
-                <Moon
-                  className={`h-[1.2rem] w-[1.2rem] transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                    theme === "light"
-                      ? "text-[#A1A1AA] scale-75 rotate-12"
-                      : "text-blue-500 scale-100 rotate-0"
-                  }`}
-                />
-              </div>
+              {theme === "dark" ? (
+                <Sun className="h-[1.5rem] w-[1.5rem] text-yellow-500 transition-all duration-300" />
+              ) : (
+                <Moon className="h-[1.5rem] w-[1.5rem] text-blue-500 transition-all duration-300" />
+              )}
             </Button>
+
             <Button
               variant="ghost"
               size="icon"
@@ -172,30 +153,11 @@ export function Header() {
                 className="bg-transparent hover:bg-transparent"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
-                <div className="flex items-center space-x-2 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-                  <Sun
-                    className={`h-[1.2rem] w-[1.2rem] transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                      theme === "dark"
-                        ? "text-[#A1A1AA] scale-75 rotate-12"
-                        : "text-yellow-500 scale-100 rotate-0"
-                    }`}
-                  />
-                  <Switch
-                    checked={theme === "dark"}
-                    onCheckedChange={() =>
-                      setTheme(theme === "light" ? "dark" : "light")
-                    }
-                    aria-label="Toggle theme"
-                    className="transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110"
-                  />
-                  <Moon
-                    className={`h-[1.2rem] w-[1.2rem] transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                      theme === "light"
-                        ? "text-[#A1A1AA] scale-75 rotate-12"
-                        : "text-blue-500 scale-100 rotate-0"
-                    }`}
-                  />
-                </div>
+                {theme === "dark" ? (
+                  <Sun className="h-[1.5rem] w-[1.5rem] text-yellow-500 transition-all duration-300" />
+                ) : (
+                  <Moon className="h-[1.5rem] w-[1.5rem] text-blue-500 transition-all duration-300" />
+                )}
               </Button>
             </div>
           </nav>

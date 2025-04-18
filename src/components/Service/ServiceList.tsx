@@ -27,7 +27,7 @@ export default function ServiceList({ servicios }: Props) {
       {servicios.map((servicio) => (
         <Card
           key={servicio.id}
-          className="overflow-hidden transition-all duration-300 hover:shadow-xl group bg-white dark:bg-gray-800 border-0 shadow-lg"
+          className="overflow-hidden transition-all duration-300 hover:shadow-xl group bg-card border border-border shadow-md"
         >
           <div className="relative h-48 overflow-hidden">
             <Image
@@ -40,23 +40,24 @@ export default function ServiceList({ servicios }: Props) {
           </div>
 
           <CardHeader className="pb-2">
-            <h3 className="text-xl font-bold line-clamp-2">
+            <h3 className="text-xl font-bold line-clamp-2 text-foreground">
               {servicio.titulo}
             </h3>
           </CardHeader>
 
           <CardContent>
-            <p className="text-muted-foreground line-clamp-3">
-              {servicio.contenido}
-            </p>
-            <div className="flex items-center mt-4 text-sm text-muted-foreground">
+            <p className="text-muted line-clamp-3">{servicio.contenido}</p>
+            <div className="flex items-center mt-4 text-sm text-muted">
               <Calendar className="h-4 w-4 mr-1" />
               Publicado: {formatearFecha(new Date(servicio.createdAt))}
             </div>
           </CardContent>
 
           <CardFooter className="pt-2">
-            <Button asChild className="w-full text-white bg-gray-500">
+            <Button
+              asChild
+              className="w-full text-white bg-primary hover:bg-primary/80 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            >
               <Link href={`/servicios/${servicio.id}`}>
                 Ver detalles <ArrowRight className="ml-2 h-4 w-4" />
               </Link>

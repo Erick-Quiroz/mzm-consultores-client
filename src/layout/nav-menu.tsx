@@ -16,7 +16,7 @@ export function NavMenu({ items }: NavMenuProps) {
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
 
   return (
-    <ul className="relative z-50 flex space-x-4">
+    <ul className="flex space-x-4">
       {items.map((item) => (
         <li key={item.title} className="relative group">
           <a

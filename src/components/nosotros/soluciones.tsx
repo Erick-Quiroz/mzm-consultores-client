@@ -1,22 +1,19 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { BarChart2, Briefcase, Cloud, Code, Cpu, Shield } from "lucide-react";
 export default function Soluciones() {
   return (
-    <section className="w-full  ">
-      <div className=" px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Nuestras Soluciones
-            </h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
-              Ofrecemos una gama completa de servicios y productos diseñados
-              para impulsar el éxito de su negocio.
-            </p>
-          </div>
+    <section className="w-full py-12 md:py-24 lg:py-32">
+      <div className="px-4 md:px-6">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+            Nuestras Soluciones
+          </h2>
+          <p className="max-w-[900px] mx-auto text-muted-foreground md:text-xl/relaxed">
+            Ofrecemos una gama completa de servicios y productos diseñados para
+            impulsar el éxito de su negocio.
+          </p>
         </div>
-        <div className="mx-auto grid max-w-5xl gap-8 py-12 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid max-w-5xl gap-8 mx-auto sm:grid-cols-2 md:grid-cols-3">
           {[
             {
               title: "Consultoría Estratégica",
@@ -55,18 +52,16 @@ export default function Soluciones() {
               icon: <Cpu className="h-10 w-10 text-brand-purple" />,
             },
           ].map((service, index) => (
-            <Card
+            <div
               key={index}
-              className="border-none shadow-md hover:shadow-lg transition-all duration-300"
+              className="p-6 text-center bg-white rounded-lg shadow-md dark:bg-gray-800 hover:shadow-lg transition-shadow duration-300"
             >
-              <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                <div className="rounded-full bg-brand-blue/10 p-3">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-bold">{service.title}</h3>
-                <p className="text-muted-foreground">{service.description}</p>
-              </CardContent>
-            </Card>
+              <div className="p-3 mx-auto mb-4 rounded-full bg-brand-blue/10">
+                {service.icon}
+              </div>
+              <h3 className="text-xl font-bold">{service.title}</h3>
+              <p className="text-muted-foreground">{service.description}</p>
+            </div>
           ))}
         </div>
       </div>

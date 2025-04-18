@@ -1,32 +1,12 @@
 "use client";
 import { Award, Target, Users } from "lucide-react";
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 1 },
-  visible: { transition: { staggerChildren: 0.2 } },
-};
 
 export default function Esencia() {
   return (
-    <motion.section
-      initial="hidden"
-      animate="visible"
-      variants={staggerContainer}
-      className="w-full py-12 md:py-24 lg:py-32"
-    >
+    <section className="w-full py-12 md:py-24 lg:py-32">
       <div className="px-4 md:px-6">
-        <motion.div
-          variants={fadeInUp}
-          className="flex flex-col items-center justify-center space-y-4 text-center"
-        >
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Nuestra Esencia
@@ -36,11 +16,8 @@ export default function Esencia() {
               día.
             </p>
           </div>
-        </motion.div>
-        <motion.div
-          variants={staggerContainer}
-          className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3"
-        >
+        </div>
+        <div className="grid max-w-5xl gap-6 py-12 mx-auto lg:grid-cols-3">
           {[
             {
               title: "Misión",
@@ -67,26 +44,19 @@ export default function Esencia() {
               iconBg: "bg-orange-300",
             },
           ].map((item, index) => (
-            <motion.div
+            <div
               key={index}
-              variants={fadeInUp}
-              whileHover={{ scale: 1.05 }}
+              className={`border-none shadow-md bg-gradient-to-br ${item.bg} hover:shadow-lg transition-all duration-300 p-6 rounded-lg text-center`}
             >
-              <Card
-                className={`border-none shadow-md bg-gradient-to-br ${item.bg} hover:shadow-lg transition-all duration-300`}
-              >
-                <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                  <div className={`rounded-full ${item.iconBg} p-3`}>
-                    <item.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-bold">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
+              <div className={`rounded-full ${item.iconBg} p-3 mx-auto mb-4`}>
+                <item.icon className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-bold">{item.title}</h3>
+              <p className="text-muted-foreground">{item.description}</p>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
